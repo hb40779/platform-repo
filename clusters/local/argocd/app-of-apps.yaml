@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/hb40779/platform-repo.git
-    targetRevision: master
+    targetRevision: main
     path: clusters/local/argocd/apps
   destination:
     server: https://kubernetes.default.svc
