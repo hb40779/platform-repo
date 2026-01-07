@@ -14,7 +14,7 @@ spec:
         - https://raw.githubusercontent.com/hb40779/hello-world-app/main/values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: playground
   syncPolicy:
     automated:
       prune: true
