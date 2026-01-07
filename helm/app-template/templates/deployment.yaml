@@ -1,6 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  labels:
+    app.kubernetes.io/managed-by: platform-team
   name: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.replicaCount }}
