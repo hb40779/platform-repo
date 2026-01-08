@@ -11,7 +11,7 @@ spec:
     path: helm/app-template
     helm:
       valueFiles:
-        - https://raw.githubusercontent.com/hb40779/hello-api-app/main/values.yaml
+        - https://raw.githubusercontent.com/hb40779/hello-world-app/main/values-hello-api.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: hello-api
