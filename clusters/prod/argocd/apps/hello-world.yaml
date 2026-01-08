@@ -1,20 +1,29 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: hello-world-prod
+  name: hello-world
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: https://github.com/hb40779/platform-repo.git
-    targetRevision: main
-    path: helm/app-template
-    helm:
-      valueFiles:
-        - https://raw.githubusercontent.com/hb40779/hello-world-app/main/values.yaml
+
+  sources:
+    # 1️⃣ Platform repo – Helm chart
+    - repoURL: https://github.com/hb40779/platform-repo.git
+      targetRevision: main
+      path: helm/app-template
+      helm:
+        valueFiles:
+          - $values/values.yaml
+
+    # 2️⃣ App repo – values
+    - repoURL: https://github.com/hb40779/hello-world-app.git
+      targetRevision: main
+      ref: values
+
   destination:
     server: https://kubernetes.default.svc
     namespace: prod
+
   syncPolicy:
     automated:
       prune: true
