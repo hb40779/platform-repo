@@ -177,6 +177,85 @@ git clone git@github.com:<your-user>/<repo-name>.git
 cd <repo-name>
 ```
 
+# ArgoCD Root Applications (App-of-Apps)
+
+## 🚀 Applying the ArgoCD Root Applications (App-of-Apps)
+
+ArgoCD uses a declarative GitOps model, which means it only starts managing resources after an Application object is created in the cluster.
+
+For each environment (`local`, `staging`, `prod`), we define a root ArgoCD Application using the app-of-apps pattern.
+
+This root application is responsible for discovering and managing all child applications for that environment.
+
+## 🧠 Concept: App-of-Apps Pattern
+
+* Each environment has one root Application
+* The root Application points to a folder containing application definitions
+* ArgoCD recursively creates and manages all child Applications
+* Environments are fully isolated from each other
+
+```
+Environment
+└── Root Application
+    └── Applications folder
+        ├── hello-world
+        └── api-service
+```
+
+## 📂 Root Application Locations
+
+Each environment has its own root application definition:
+
+```
+clusters/local/argocd/app-of-apps.yaml
+clusters/staging/argocd/app-of-apps.yaml
+clusters/prod/argocd/app-of-apps.yaml
+```
+
+## ✅ Applying the Root Applications
+
+To bootstrap ArgoCD for each environment, apply the root applications manually once.
+
+These commands are usually executed from the platform repository root.
+
+### Local environment
+
+```bash
+kubectl apply -f clusters/local/argocd/app-of-apps.yaml
+```
+
+### Staging environment
+
+```bash
+kubectl apply -f clusters/staging/argocd/app-of-apps.yaml
+```
+
+### Production environment
+
+```bash
+kubectl apply -f clusters/prod/argocd/app-of-apps.yaml
+```
+
+## 🔁 What Happens After Apply
+
+After applying a root application:
+
+1. ArgoCD registers the root Application
+2. ArgoCD scans the referenced `apps/` directory
+3. Child Applications are automatically created
+4. Kubernetes resources are rendered and applied
+5. ArgoCD continuously reconciles desired state
+
+No further `kubectl apply` is required for applications.
+
+## ⚠️ Important Notes
+
+* Root applications are managed manually
+* Child applications are managed by Git
+* Do not delete root applications unless you want to remove the entire environment
+* Changes to apps should always be done via Git commits
+
+
 
 ## 📦 Helm App Template
 
