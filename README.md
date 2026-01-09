@@ -123,6 +123,8 @@ Configure kubectl:
 mkdir -p ~/.kube
 sudo cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
 sudo chown $USER:$USER ~/.kube/config
+echo 'export KUBECONFIG=~/.kube/config' >> ~/.bashrc
+source ~/.bashrc
 ```
 
 ---
@@ -146,9 +148,35 @@ kubectl apply -n argocd \
 Access UI (port‑forward):
 ```bash
 kubectl port-forward svc/argocd-server -n argocd 8080:443
+
+ssh -L 8080:localhost:8080 $USER@<UbuntuVM_IP>
+
+https://localhost:8080
+
+# Username
+admin
+
+# Password
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+
 ```
 
----
+## 🔑 Generate SSH Key / Add public key to GitHub
+
+Run the following command on your Ubuntu VM:
+
+```bash
+ssh-keygen -t ed25519 -C "email@example.com"
+
+```
+
+## Clone an Existing Remote Repository
+
+```bash
+git clone git@github.com:<your-user>/<repo-name>.git
+cd <repo-name>
+```
+
 
 ## 📦 Helm App Template
 
