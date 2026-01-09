@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: api-service-local
+  namespace: argocd
+spec:
+  project: default
+
+  sources:
+    - repoURL: https://github.com/hb40779/platform-repo.git
+      targetRevision: main
+      path: helm/app-template
+      helm:
+        valueFiles:
+          - $values/values.yaml
+
+    - repoURL: https://github.com/hb40779/api-service-app.git
+      targetRevision: main
+      ref: values
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: api-service-local
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
