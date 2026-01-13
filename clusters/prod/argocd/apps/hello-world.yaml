@@ -13,7 +13,7 @@ spec:
       path: helm/app-template
       helm:
         valueFiles:
-          - $values/values.yaml
+          - $values/prod-values.yaml
 
     # 2️⃣ App repo – values
     - repoURL: https://github.com/hb40779/hello-world-app.git
